@@ -4,11 +4,11 @@ import { SimulationNameDto } from './dto/simulationName.dto';
 
 @Controller('simulation')
 export class SimulationController {
-    constructor(private readonly service: SimulationService){}
+    constructor(private readonly simulationService: SimulationService){}
 
     @Post('start')
     startSimulation(@Body(new ValidationPipe) name: SimulationNameDto){
-        return 
+        return this.simulationService.startSimulation();
     }
 
     @Post('finish')
