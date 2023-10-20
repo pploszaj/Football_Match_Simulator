@@ -12,9 +12,13 @@ export class SimulationController {
     }
 
     @Post('finish')
-    finishSimulation(){}
+    finishSimulation(){
+        return this.simulationService.finishSimulation();
+    }
 
     @Post('restart')
-    restartSimulation(){}
+    restartSimulation(){
+        return this.simulationService.restartSimulation();
+    }
 
 }

@@ -15,6 +15,8 @@ type MatchScores = {
 export class SimulationService {
   private timeOfLastSimulation: Date | null = null;
   private isFinished: boolean;
+  private timeoutFunction: ReturnType<typeof setTimeout>;
+  private intervals: ReturnType<typeof setInterval>[] = [];
   private matchScores: MatchScores = {
     'Germany vs Poland': { home: 0, away: 0 },
     'Brazil vs Mexico': { home: 0, away: 0 },
@@ -40,25 +42,43 @@ export class SimulationService {
 
     //every 10 seconds a team scores
     for(let match in this.matchScores){
-        setInterval(() => {
+        const interval = setInterval(() => {
             const scoringTeam: string = Math.random() > 0.5 ? 'home' : 'away';
             this.matchScores[match][scoringTeam] += 1;
             //send goal update to frontend
         }, 10000)
+
+        this.intervals.push(interval);
     }
 
     //simulation takes 90 seconds
-    setTimeout(() => {
-      this.finishSimulation();
+    this.timeoutFunction = setTimeout(() => {
+        this.finishSimulation();
     }, 90000);
   }
 
   finishSimulation() {
+    //if simulation wasn't started, it cannot be finished
+    if(!this.timeoutFunction) throw Error;
+
+    //clear 90 second timeout
+    clearTimeout(this.timeoutFunction);
+
+    //clear intervals
+    this.intervals.map(interval => clearInterval(interval));
+
+  }
+
+  restartSimulation() {
     //reset match scores
     this.matchScores = {
-      'Germany vs Poland': { home: 0, away: 0 },
-      'Brazil vs Mexico': { home: 0, away: 0 },
-      'Argentina vs Uruguay': { home: 0, away: 0 },
-    };
+        'Germany vs Poland': { home: 0, away: 0 },
+        'Brazil vs Mexico': { home: 0, away: 0 },
+        'Argentina vs Uruguay': { home: 0, away: 0 },
+      };
+      
+    //start simulation
+    this.startSimulation();
+
   }
 }
