@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, ValidationPipe } from '@nestjs/common';
 import { SimulationService } from './simulation.service';
 import { SimulationNameDto } from './dto/simulationName.dto';
 
@@ -7,7 +7,9 @@ export class SimulationController {
     constructor(private readonly service: SimulationService){}
 
     @Post('start')
-    startSimulation(@Body() name: SimulationNameDto){}
+    startSimulation(@Body(new ValidationPipe) name: SimulationNameDto){
+        return 
+    }
 
     @Post('finish')
     finishSimulation(){}
