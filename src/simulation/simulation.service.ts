@@ -7,7 +7,7 @@ export class SimulationService {
   constructor(private readonly gateway: Gateway) {}
 
   private timeOfLastSimulation: Date | null = null;
-  private isFinished: boolean;
+  private wasManuallyFinished: boolean = false;
   private timeoutFunction: ReturnType<typeof setTimeout>;
   private intervals: ReturnType<typeof setInterval>[] = [];
   private matchScores: MatchScores = {
@@ -18,7 +18,8 @@ export class SimulationService {
 
   //check if user can start a new simulation (last simulation had to have happened at least 5min ago)
   canStartNewSimulation() {
-    if (!this.timeOfLastSimulation) {
+    if (!this.timeOfLastSimulation || this.wasManuallyFinished) {
+      this.wasManuallyFinished = false;
       return true;
     } else {
       let currentTime: Date = new Date();
@@ -31,8 +32,10 @@ export class SimulationService {
   }
 
   startSimulation() {
-    if (!this.canStartNewSimulation())
+    if (!this.canStartNewSimulation()) {
       throw new Error('Can only start a simulation once every 5 minutes');
+    }
+
     this.timeOfLastSimulation = new Date();
 
     //every 10 seconds a team scores
@@ -63,6 +66,8 @@ export class SimulationService {
 
     //clear intervals
     this.intervals.map((interval) => clearInterval(interval));
+
+    this.wasManuallyFinished = true;
   }
 
   restartSimulation() {
