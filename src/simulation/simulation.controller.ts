@@ -17,7 +17,11 @@ export class SimulationController {
 
     @Get('finish')
     finishSimulation(){
-        return this.simulationService.finishSimulation();
+        try {
+            return this.simulationService.finishSimulation();
+        } catch(err) {
+            throw new BadRequestException('Error finishing simulation');
+        }
     }
 
     @Get('restart')

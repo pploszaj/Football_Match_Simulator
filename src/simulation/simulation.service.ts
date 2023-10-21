@@ -63,7 +63,7 @@ export class SimulationService {
     return 'Simulation successfully started';
   }
 
-  finishSimulation() {
+  finishSimulation(): string {
     //if simulation wasn't started, it cannot be finished
     if (!this.timeoutFunction)
       throw new Error('No simulation has been started');
@@ -75,6 +75,8 @@ export class SimulationService {
     clearInterval(this.interval);
 
     this.isFinished = true;
+
+    return 'Simulation successfully finished';
   }
 
   restartSimulation() {
