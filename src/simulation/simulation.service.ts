@@ -22,7 +22,7 @@ export class SimulationService {
       this.isFinished = false;
       return true;
     } else {
-      let currentTime: Date = new Date();
+      let currentTime: Date = new Date(Date.now());
       let differenceInMinutes =
         Math.abs(this.timeOfLastSimulation.getTime() - currentTime.getTime()) /
         1000 /
@@ -36,7 +36,7 @@ export class SimulationService {
       throw new Error('Can only start a simulation once every 5 minutes');
     }
 
-    this.timeOfLastSimulation = new Date();
+    this.timeOfLastSimulation = new Date(Date.now());
 
     //every 10 seconds a team scores
 
