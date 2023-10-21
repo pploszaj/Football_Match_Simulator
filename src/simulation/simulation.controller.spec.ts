@@ -75,5 +75,22 @@ describe('SimulationController', () => {
         'Error finishing simulation',
       );
     });
+
+    describe('restartSimulation', () => {
+      it('should successfully restart a simulation', () => {
+        mockSimulationService.restartSimulation.mockReturnValue('Successfully restarted simulation');
+        expect(controller.restartSimulation()).toBe('Successfully restarted simulation');
+      });
+
+      it('should throw a BadRequestException if the service throws an error', () => {
+        mockSimulationService.restartSimulation.mockImplementation(() => {
+          throw new Error('Error restarting simulation');
+        });
+
+        expect(() => controller.restartSimulation()).toThrow(BadRequestException);
+        expect(() => controller.restartSimulation()).toThrow('You cannot restart a simulation that has not finished or is not currently running.');
+      });
+
+    })
   });
 });

@@ -79,7 +79,7 @@ export class SimulationService {
     return 'Simulation successfully finished';
   }
 
-  restartSimulation() {
+  restartSimulation(): string {
     //check to make sure that a simulation has finished
     if(!this.isFinished){
       throw new Error('Cannot restart a simulation that has not finished or is not running.');
@@ -93,5 +93,6 @@ export class SimulationService {
 
     //start simulation
     this.startSimulation();
+    return 'Simulation successfully restarted'
   }
 }
