@@ -93,6 +93,6 @@ export class SimulationService {
 
     //start simulation
     this.startSimulation();
-    return 'Simulation successfully restarted'
+    return 'Simulation successfully restarted';
   }
 }
