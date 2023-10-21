@@ -9,9 +9,7 @@ export class Gateway {
     server: Server;
 
     sendScoreUpdates(matchScores: MatchScores) {
+        console.log('sending match scores: ', matchScores)
         this.server.emit('matchScores', matchScores);
     }
-
-
-
 }

@@ -39,16 +39,21 @@ export class SimulationService {
     this.timeOfLastSimulation = new Date();
 
     //every 10 seconds a team scores
-    for (let match in this.matchScores) {
-      const interval = setInterval(() => {
-        const scoringTeam: string = Math.random() > 0.5 ? 'home' : 'away';
-        this.matchScores[match][scoringTeam] += 1;
-        //send goal update to frontend
-        this.gateway.sendScoreUpdates(this.matchScores);
-      }, 10000);
 
-      this.intervals.push(interval);
-    }
+    const interval = setInterval(() => {
+      const matchNames = Object.keys(this.matchScores);
+
+      const randomIndex = Math.floor(Math.random() * matchNames.length);
+      const scoringMatch = matchNames[randomIndex];
+
+      const scoringTeam: string = Math.random() > 0.5 ? 'home' : 'away';
+      this.matchScores[scoringMatch][scoringTeam] += 1;
+
+      //send goal update to frontend
+      this.gateway.sendScoreUpdates(this.matchScores);
+    }, 10000);
+
+    this.intervals.push(interval);
 
     //simulation takes 90 seconds
     this.timeoutFunction = setTimeout(() => {
