@@ -7,9 +7,9 @@ export class SimulationService {
   constructor(private readonly gateway: Gateway) {}
 
   private timeOfLastSimulation: Date | null = null;
-  private wasManuallyFinished: boolean = false;
+  private isFinished: boolean = false;
   private timeoutFunction: ReturnType<typeof setTimeout>;
-  private intervals: ReturnType<typeof setInterval>[] = [];
+  private interval: ReturnType<typeof setInterval>;
   private matchScores: MatchScores = {
     'Germany vs Poland': { home: 0, away: 0 },
     'Brazil vs Mexico': { home: 0, away: 0 },
@@ -18,8 +18,8 @@ export class SimulationService {
 
   //check if user can start a new simulation (last simulation had to have happened at least 5min ago)
   canStartNewSimulation() {
-    if (!this.timeOfLastSimulation || this.wasManuallyFinished) {
-      this.wasManuallyFinished = false;
+    if (!this.timeOfLastSimulation || this.isFinished) {
+      this.isFinished = false;
       return true;
     } else {
       let currentTime: Date = new Date();
@@ -53,7 +53,7 @@ export class SimulationService {
       this.gateway.sendScoreUpdates(this.matchScores);
     }, 10000);
 
-    this.intervals.push(interval);
+    this.interval = interval;
 
     //simulation takes 90 seconds
     this.timeoutFunction = setTimeout(() => {
@@ -70,12 +70,16 @@ export class SimulationService {
     clearTimeout(this.timeoutFunction);
 
     //clear intervals
-    this.intervals.map((interval) => clearInterval(interval));
+    clearInterval(this.interval);
 
-    this.wasManuallyFinished = true;
+    this.isFinished = true;
   }
 
   restartSimulation() {
+    //check to make sure that a simulation has finished
+    if(!this.isFinished){
+      throw new Error('Cannot restart a simulation that has not finished or is not running.');
+    }
     //reset match scores
     this.matchScores = {
       'Germany vs Poland': { home: 0, away: 0 },
