@@ -22,7 +22,11 @@ export class SimulationController {
 
     @Post('restart')
     restartSimulation(){
-        return this.simulationService.restartSimulation();
+        try {
+            return this.simulationService.restartSimulation();
+        } catch(err) {
+            throw new BadRequestException('You cannot restart a simulation that has not finished or is not currently running.')
+        }
     }
 
 }
