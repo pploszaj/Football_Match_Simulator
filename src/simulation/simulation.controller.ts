@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Post, ValidationPipe } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Post, ValidationPipe } from '@nestjs/common';
 import { SimulationService } from './simulation.service';
 import { SimulationNameDto } from './dto/simulationName.dto';
 
@@ -15,12 +15,12 @@ export class SimulationController {
         }
     }
 
-    @Post('finish')
+    @Get('finish')
     finishSimulation(){
         return this.simulationService.finishSimulation();
     }
 
-    @Post('restart')
+    @Get('restart')
     restartSimulation(){
         try {
             return this.simulationService.restartSimulation();

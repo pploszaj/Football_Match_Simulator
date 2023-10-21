@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Gateway } from 'src/gateway/gateway';
-import { MatchScores } from 'src/types/matches';
+import { Gateway } from '../gateway/gateway';
+import { MatchScores } from '../types/matches';
 
 @Injectable()
 export class SimulationService {
@@ -31,7 +31,7 @@ export class SimulationService {
     }
   }
 
-  startSimulation() {
+  startSimulation(): string {
     if (!this.canStartNewSimulation()) {
       throw new Error('Can only start a simulation once every 5 minutes');
     }
@@ -59,6 +59,8 @@ export class SimulationService {
     this.timeoutFunction = setTimeout(() => {
       this.finishSimulation();
     }, 90000);
+
+    return 'Simulation successfully started';
   }
 
   finishSimulation() {
